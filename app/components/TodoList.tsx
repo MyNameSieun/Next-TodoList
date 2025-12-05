@@ -6,9 +6,9 @@ const TodoList = () => {
       <h2 className="text-[1.3rem] font-bold text-(--color-primary)">
         3 tesks
       </h2>
-      <form className="mb-3">
+      <form className="mb-3 flex border-b">
         <input
-          className="border-b p-3 outline-none focus:border-(--color-primary)"
+          className="p-3 outline-none focus:border-(--color-primary)"
           placeholder="검색어를 입력하세요"
         />
       </form>
