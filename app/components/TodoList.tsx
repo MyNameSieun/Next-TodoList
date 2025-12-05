@@ -13,7 +13,11 @@ const TodoList = () => {
         />
       </form>
 
-      <ul className="flex flex-col gap-1">
+      <ul className="flex max-h-[35vh] flex-col gap-1 overflow-auto px-3">
+        <TodoItem />
+        <TodoItem />
+        <TodoItem />
+        <TodoItem />
         <TodoItem />
         <TodoItem />
         <TodoItem />
