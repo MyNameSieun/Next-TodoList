@@ -9,9 +9,7 @@ const TodoItem = () => {
         <p>주토피아2 보러가기</p>
       </Link>
 
-      <time className="text-sm text-(--color-gray)" dateTime="2025-12-04">
-        2025.12.04
-      </time>
+      <time className="text-sm text-(--color-gray)">2025.12.04</time>
 
       <Button variant={"destructive"}>삭제</Button>
     </li>
