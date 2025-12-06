@@ -1,17 +1,42 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Todo } from "../types/Todo";
 
-const TodoItem = () => {
+interface TodoItemProps extends Todo {
+  toggleTodo: (targetId: string) => void;
+  deleteTodo: (targetId: string) => void;
+}
+
+const TodoItem = ({
+  id,
+  content,
+  isDone,
+  time,
+  toggleTodo,
+  deleteTodo,
+}: TodoItemProps) => {
+  const handleToggleTodo = () => {
+    toggleTodo(id);
+  };
+
+  const handleDeleteTodo = () => {
+    deleteTodo(id);
+  };
+
   return (
     <li className="flex items-center gap-3 border-b py-3">
-      <input type="checkbox" />
-      <Link className="flex-1" href={`/todo/${2}`}>
-        <p>주토피아2 보러가기</p>
+      <input type="checkbox" onChange={handleToggleTodo} checked={isDone} />
+      <Link className="flex-1" href={`/todo/${id}`}>
+        <p>{content}</p>
       </Link>
 
-      <time className="text-sm text-(--color-gray)">2025.12.04</time>
+      <time className="text-sm text-(--color-gray)">
+        {new Date(time).toLocaleDateString()}
+      </time>
 
-      <Button variant={"destructive"}>삭제</Button>
+      <Button onClick={handleDeleteTodo} variant={"destructive"}>
+        삭제
+      </Button>
     </li>
   );
 };
