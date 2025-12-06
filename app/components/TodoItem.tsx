@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Todo } from "../types/Todo";
+import React from "react";
 
 interface TodoItemProps extends Todo {
   toggleTodo: (targetId: string) => void;
@@ -41,4 +42,4 @@ const TodoItem = ({
   );
 };
 
-export default TodoItem;
+export default React.memo(TodoItem);

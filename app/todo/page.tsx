@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useReducer, useState } from "react";
+import { useCallback, useMemo, useReducer, useState } from "react";
 import TodoCount from "../components/TodoCount";
 import TodoEditor from "../components/TodoEditor";
 import TodoHeader from "../components/TodoHeader";
@@ -9,13 +9,11 @@ import TodoSearch from "../components/TodoSearch";
 import { mockData } from "../mockData";
 import { Todo } from "../types/Todo";
 
-// 1. 액션 타입 정의
 type Action =
   | { type: "CREATE"; data: Todo }
   | { type: "DELETE"; targetId: string }
   | { type: "UPDATE"; targetId: string };
 
-// 2. 리듀서 함수 생성
 const reducerTodo = (state: Todo[], action: Action) => {
   switch (action.type) {
     case "CREATE":
@@ -32,12 +30,10 @@ const reducerTodo = (state: Todo[], action: Action) => {
 };
 
 const TodoPage = () => {
-  // 3. useReducer 훅 호출
   const [state, dispatch] = useReducer(reducerTodo, mockData);
   const [search, setSearch] = useState("");
 
-  // 4. 액션 객체 전달
-  const addTodo = (content: string) => {
+  const addTodo = useCallback((content: string) => {
     dispatch({
       type: "CREATE",
       data: {
@@ -47,21 +43,21 @@ const TodoPage = () => {
         time: new Date().getTime(),
       },
     });
-  };
+  }, []);
 
-  const toggleTodo = (targetId: string) => {
+  const toggleTodo = useCallback((targetId: string) => {
     dispatch({
       type: "UPDATE",
       targetId: targetId,
     });
-  };
+  }, []);
 
-  const deleteTodo = (targarId: string) => {
+  const deleteTodo = useCallback((targarId: string) => {
     dispatch({
       type: "DELETE",
       targetId: targarId,
     });
-  };
+  }, []);
 
   const filteredTodos = state.filter((todo) =>
     todo.content.toLowerCase().trim().includes(search.toLowerCase().trim()),
