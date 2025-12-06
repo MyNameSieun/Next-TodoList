@@ -3,16 +3,6 @@ import TodoItem from "./TodoItem";
 const TodoList = () => {
   return (
     <section className="flex flex-col gap-1">
-      <h2 className="text-[1.3rem] font-bold text-(--color-primary)">
-        3 tesks
-      </h2>
-      <form className="mb-3 flex border-b">
-        <input
-          className="p-3 outline-none focus:border-(--color-primary)"
-          placeholder="검색어를 입력하세요"
-        />
-      </form>
-
       <ul className="flex max-h-[35vh] flex-col gap-1 overflow-auto px-3">
         <TodoItem />
         <TodoItem />
