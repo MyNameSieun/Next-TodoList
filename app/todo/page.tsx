@@ -67,6 +67,14 @@ const TodoPage = () => {
     todo.content.toLowerCase().trim().includes(search.toLowerCase().trim()),
   );
 
+  const getAnalyzedData = () => {
+    console.log("getAnalyzedData 호출!");
+    const totalCount = state.length;
+    const doneCount = state.filter((todo) => todo.isDone).length;
+    const notDoneCount = totalCount - doneCount;
+    return { totalCount, doneCount, notDoneCount };
+  };
+
   return (
     <main className="flex min-h-screen items-center justify-center">
       <div className="flex h-[80vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white p-32 shadow-xl">
@@ -75,7 +83,7 @@ const TodoPage = () => {
           <TodoEditor addTodo={addTodo} />
         </div>
 
-        <TodoCount />
+        <TodoCount getAnalyzedData={getAnalyzedData} />
 
         <TodoSearch search={search} setSearch={setSearch} />
 
