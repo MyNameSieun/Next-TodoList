@@ -1,4 +1,4 @@
-const TodoSearchForm = () => {
+const TodoSearch = () => {
   return (
     <form className="mb-3 flex border-b">
       <input
@@ -9,4 +9,4 @@ const TodoSearchForm = () => {
   );
 };
 
-export default TodoSearchForm;
+export default TodoSearch;
