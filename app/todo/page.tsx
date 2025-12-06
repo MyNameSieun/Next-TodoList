@@ -37,6 +37,13 @@ const TodoPage = () => {
   const filteredTodos = todos.filter((todo) =>
     todo.content.toLowerCase().trim().includes(search.toLowerCase().trim()),
   );
+  const getAnalyzedData = () => {
+    console.log("getAnalyzedData 호출!");
+    const totalCount = todos.length;
+    const doneCount = todos.filter((todo) => todo.isDone).length;
+    const notDoneCount = totalCount - doneCount;
+    return { totalCount, doneCount, notDoneCount };
+  };
 
   return (
     <main className="flex min-h-screen items-center justify-center">
@@ -46,7 +53,7 @@ const TodoPage = () => {
           <TodoEditor addTodo={addTodo} />
         </div>
 
-        <TodoCount />
+        <TodoCount getAnalyzedData={getAnalyzedData} />
 
         <TodoSearch search={search} setSearch={setSearch} />
 
