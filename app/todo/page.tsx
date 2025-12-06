@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducer, useState } from "react";
+import { useMemo, useReducer, useState } from "react";
 import TodoCount from "../components/TodoCount";
 import TodoEditor from "../components/TodoEditor";
 import TodoHeader from "../components/TodoHeader";
@@ -67,13 +67,13 @@ const TodoPage = () => {
     todo.content.toLowerCase().trim().includes(search.toLowerCase().trim()),
   );
 
-  const getAnalyzedData = () => {
+  const { totalCount, doneCount, notDoneCount } = useMemo(() => {
     console.log("getAnalyzedData 호출!");
     const totalCount = state.length;
     const doneCount = state.filter((todo) => todo.isDone).length;
     const notDoneCount = totalCount - doneCount;
     return { totalCount, doneCount, notDoneCount };
-  };
+  }, [state]);
 
   return (
     <main className="flex min-h-screen items-center justify-center">
@@ -83,7 +83,11 @@ const TodoPage = () => {
           <TodoEditor addTodo={addTodo} />
         </div>
 
-        <TodoCount getAnalyzedData={getAnalyzedData} />
+        <TodoCount
+          totalCount={totalCount}
+          doneCount={doneCount}
+          notDoneCount={notDoneCount}
+        />
 
         <TodoSearch search={search} setSearch={setSearch} />
 
