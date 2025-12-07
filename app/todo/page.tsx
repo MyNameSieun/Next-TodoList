@@ -1,23 +1,34 @@
-import Editor from "../components/TodoEditor";
-import Header from "../components/TodoHeader";
+"use client";
+
+import { useState } from "react";
+import TodoCount from "../components/TodoCount";
+import TodoEditor from "../components/TodoEditor";
+import TodoHeader from "../components/TodoHeader";
 import TodoList from "../components/TodoList";
-import TodoSearchForm from "../components/TodoSearchForm";
+import TodoSearch from "../components/TodoSearch";
+import { useTodoState } from "../context/TodoContext";
 
 const TodoPage = () => {
+  const [search, setSearch] = useState("");
+  const todos = useTodoState();
+
+  const filteredTodos = todos.filter((todo) =>
+    todo.content.toLowerCase().trim().includes(search.toLowerCase().trim()),
+  );
+
   return (
     <main className="flex min-h-screen items-center justify-center">
       <div className="flex h-[80vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white p-32 shadow-xl">
         <div className="flex flex-col gap-6">
-          <Header />
-          <Editor />
+          <TodoHeader />
+          <TodoEditor />
         </div>
 
-        <h2 className="mt-10 text-[1.3rem] font-bold text-(--color-primary)">
-          3 tasks
-        </h2>
-        <TodoSearchForm />
+        <TodoCount />
 
-        <TodoList />
+        <TodoSearch search={search} setSearch={setSearch} />
+
+        <TodoList filteredTodos={filteredTodos} />
       </div>
     </main>
   );

@@ -1,3 +1,4 @@
+import TodoProvider from "./context/TodoProvider";
 import "./globals.css";
 
 export default function RootLayout({
@@ -7,7 +8,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-[#EDEDED]">{children}</body>
+      <body className="bg-[#EDEDED]">
+        <TodoProvider>{children}</TodoProvider>
+      </body>
     </html>
   );
 }
