@@ -1,11 +1,13 @@
 "use client";
-import { ReactNode, useCallback, useMemo, useReducer } from "react";
+import { ReactNode, useCallback, useMemo, useReducer, useState } from "react";
 import { TodoDispathContext, TodoStateContext } from "./TodoContext";
 import { reducerTodo } from "./todoReducer";
 import { mockData } from "../mockData";
+import { SearchContext } from "./SearchContext";
 
 const TodoProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(reducerTodo, mockData);
+  const [search, setSearch] = useState("");
 
   const onCreate = useCallback((content: string) => {
     dispatch({
@@ -41,7 +43,9 @@ const TodoProvider = ({ children }: { children: ReactNode }) => {
   return (
     <TodoStateContext.Provider value={state}>
       <TodoDispathContext.Provider value={memoizedDispatch}>
-        {children}
+        <SearchContext.Provider value={{ search, setSearch }}>
+          {children}
+        </SearchContext.Provider>
       </TodoDispathContext.Provider>
     </TodoStateContext.Provider>
   );

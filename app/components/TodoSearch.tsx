@@ -1,10 +1,7 @@
-import { Dispatch, SetStateAction } from "react";
+import { useSearch } from "../context/SearchContext";
 
-interface TodoSearchProps {
-  search: string;
-  setSearch: Dispatch<SetStateAction<string>>;
-}
-const TodoSearch = ({ search, setSearch }: TodoSearchProps) => {
+const TodoSearch = () => {
+  const { search, setSearch } = useSearch();
   const handleChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
