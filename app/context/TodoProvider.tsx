@@ -3,7 +3,7 @@ import { ReactNode, useCallback, useMemo, useReducer, useState } from "react";
 import { TodoDispathContext, TodoStateContext } from "./TodoContext";
 import { reducerTodo } from "./todoReducer";
 import { mockData } from "../mockData";
-import { SearchContext } from "./SearchContext";
+import { TodoSearchContext } from "./TodoSearchContext";
 
 const TodoProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(reducerTodo, mockData);
@@ -43,9 +43,9 @@ const TodoProvider = ({ children }: { children: ReactNode }) => {
   return (
     <TodoStateContext.Provider value={state}>
       <TodoDispathContext.Provider value={memoizedDispatch}>
-        <SearchContext.Provider value={{ search, setSearch }}>
+        <TodoSearchContext.Provider value={{ search, setSearch }}>
           {children}
-        </SearchContext.Provider>
+        </TodoSearchContext.Provider>
       </TodoDispathContext.Provider>
     </TodoStateContext.Provider>
   );
