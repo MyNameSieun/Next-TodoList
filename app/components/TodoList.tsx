@@ -1,11 +1,15 @@
-import { Todo } from "../types/Todo";
+import { useSearch } from "../context/SearchContext";
+import { useTodoState } from "../context/TodoContext";
 import TodoItem from "./TodoItem";
 
-interface TodoListProps {
-  filteredTodos: Todo[];
-}
+const TodoList = () => {
+  const todos = useTodoState();
+  const { search } = useSearch();
 
-const TodoList = ({ filteredTodos }: TodoListProps) => {
+  const filteredTodos = todos.filter((todo) =>
+    todo.content.toLowerCase().trim().includes(search.toLowerCase().trim()),
+  );
+
   return (
     <section className="flex flex-col gap-1">
       <ul className="flex max-h-[35vh] flex-col gap-1 overflow-auto px-3">
