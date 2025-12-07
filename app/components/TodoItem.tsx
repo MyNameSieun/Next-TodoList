@@ -1,27 +1,19 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Todo } from "../types/Todo";
 import React from "react";
+import { useTodoDispath } from "../context/TodoContext";
 
-interface TodoItemProps extends Todo {
-  toggleTodo: (targetId: string) => void;
-  deleteTodo: (targetId: string) => void;
-}
+const TodoItem = ({ id, content, isDone, time }: Todo) => {
+  const { onToggle, onDelete } = useTodoDispath();
 
-const TodoItem = ({
-  id,
-  content,
-  isDone,
-  time,
-  toggleTodo,
-  deleteTodo,
-}: TodoItemProps) => {
   const handleToggleTodo = () => {
-    toggleTodo(id);
+    onToggle(id);
   };
 
   const handleDeleteTodo = () => {
-    deleteTodo(id);
+    onDelete(id);
   };
 
   return (

@@ -1,97 +1,34 @@
 "use client";
 
-import { useCallback, useMemo, useReducer, useState } from "react";
+import { useState } from "react";
 import TodoCount from "../components/TodoCount";
 import TodoEditor from "../components/TodoEditor";
 import TodoHeader from "../components/TodoHeader";
 import TodoList from "../components/TodoList";
 import TodoSearch from "../components/TodoSearch";
-import { mockData } from "../mockData";
-import { Todo } from "../types/Todo";
-
-type Action =
-  | { type: "CREATE"; data: Todo }
-  | { type: "DELETE"; targetId: string }
-  | { type: "UPDATE"; targetId: string };
-
-const reducerTodo = (state: Todo[], action: Action) => {
-  switch (action.type) {
-    case "CREATE":
-      return [action.data, ...state];
-    case "DELETE":
-      return state.filter((todo) => todo.id !== action.targetId);
-    case "UPDATE":
-      return state.map((todo) =>
-        todo.id === action.targetId ? { ...todo, isDone: !todo.isDone } : todo,
-      );
-    default:
-      return state;
-  }
-};
+import { useTodoState } from "../context/TodoContext";
 
 const TodoPage = () => {
-  const [state, dispatch] = useReducer(reducerTodo, mockData);
   const [search, setSearch] = useState("");
+  const todos = useTodoState();
 
-  const addTodo = useCallback((content: string) => {
-    dispatch({
-      type: "CREATE",
-      data: {
-        id: crypto.randomUUID(),
-        content: content,
-        isDone: false,
-        time: new Date().getTime(),
-      },
-    });
-  }, []);
-
-  const toggleTodo = useCallback((targetId: string) => {
-    dispatch({
-      type: "UPDATE",
-      targetId: targetId,
-    });
-  }, []);
-
-  const deleteTodo = useCallback((targarId: string) => {
-    dispatch({
-      type: "DELETE",
-      targetId: targarId,
-    });
-  }, []);
-
-  const filteredTodos = state.filter((todo) =>
+  const filteredTodos = todos.filter((todo) =>
     todo.content.toLowerCase().trim().includes(search.toLowerCase().trim()),
   );
-
-  const { totalCount, doneCount, notDoneCount } = useMemo(() => {
-    console.log("getAnalyzedData 호출!");
-    const totalCount = state.length;
-    const doneCount = state.filter((todo) => todo.isDone).length;
-    const notDoneCount = totalCount - doneCount;
-    return { totalCount, doneCount, notDoneCount };
-  }, [state]);
 
   return (
     <main className="flex min-h-screen items-center justify-center">
       <div className="flex h-[80vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white p-32 shadow-xl">
         <div className="flex flex-col gap-6">
           <TodoHeader />
-          <TodoEditor addTodo={addTodo} />
+          <TodoEditor />
         </div>
 
-        <TodoCount
-          totalCount={totalCount}
-          doneCount={doneCount}
-          notDoneCount={notDoneCount}
-        />
+        <TodoCount />
 
         <TodoSearch search={search} setSearch={setSearch} />
 
-        <TodoList
-          filteredTodos={filteredTodos}
-          toggleTodo={toggleTodo}
-          deleteTodo={deleteTodo}
-        />
+        <TodoList filteredTodos={filteredTodos} />
       </div>
     </main>
   );

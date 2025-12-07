@@ -2,12 +2,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRef, useState } from "react";
+import { useTodoDispath } from "../context/TodoContext";
 
-interface TodoEditorProps {
-  addTodo: (content: string) => void;
-}
-
-const TodoEditor = ({ addTodo }: TodoEditorProps) => {
+const TodoEditor = () => {
+  const { onCreate } = useTodoDispath();
   const [content, setContent] = useState("");
   const contentRef = useRef<HTMLInputElement>(null);
 
@@ -16,7 +14,7 @@ const TodoEditor = ({ addTodo }: TodoEditorProps) => {
 
     if (content === "") return contentRef.current?.focus();
 
-    addTodo(content);
+    onCreate(content);
     setContent("");
   };
 

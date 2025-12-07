@@ -2,12 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
-import { mockData } from "@/app/mockData";
+import { useTodoState } from "@/app/context/TodoContext";
 
 const TodoDetailPage = () => {
+  const todos = useTodoState();
+
   const router = useRouter();
   const params = useParams();
-  const todo = mockData.find((todo) => todo.id === params.id);
+  const todo = todos.find((todo) => todo.id === params.id);
   if (!todo) return <p>존재하지 않는 todo입니다.</p>;
 
   const { id, content, isDone, time } = todo;
