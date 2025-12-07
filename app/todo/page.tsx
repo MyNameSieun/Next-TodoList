@@ -5,7 +5,6 @@ import TodoEditor from "../components/TodoEditor";
 import TodoHeader from "../components/TodoHeader";
 import TodoList from "../components/TodoList";
 import TodoSearch from "../components/TodoSearch";
-import { useTodoState } from "../context/TodoContext";
 
 const TodoPage = () => {
   return (
