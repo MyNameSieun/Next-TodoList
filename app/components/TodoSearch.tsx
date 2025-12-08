@@ -1,3 +1,5 @@
+"use client";
+
 import { useSearch } from "../context/TodoSearchContext";
 
 const TodoSearch = () => {

@@ -1,3 +1,5 @@
+"use client";
+
 import { useTodoState } from "../context/TodoContext";
 
 const TodoCount = () => {

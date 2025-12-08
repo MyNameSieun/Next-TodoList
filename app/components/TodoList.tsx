@@ -1,22 +1,15 @@
+"use client";
+
 import { useSearch } from "../context/TodoSearchContext";
+import { useTodos } from "../hooks/queries/use-todos-queries";
 import TodoItem from "./TodoItem";
-import { useQuery } from "@tanstack/react-query";
-import { fetchTodos } from "../services/fetch-todo";
 
 const TodoList = () => {
-  const {
-    data: todos, // data를 todos라는 이름으로 사용
-    isLoading,
-    error,
-  } = useQuery({
-    queryFn: fetchTodos, // 실행할 비동기 함수
-    queryKey: ["todos"], // 데이터를 삭제하는 고유 키 (캐싱에 사용)
-    retry: 0, // 재시도 횟수 설정 (기본값: 3)
-  });
+  const { data: todos, isLoading, error } = useTodos();
   const { search } = useSearch();
 
-  if (error) return <div>오류가 발생했습니다.</div>;
   if (isLoading) return <div>로딩 중...</div>;
+  if (error) return <div>에러 발생: {error.message}</div>;
 
   const filteredTodos = todos?.filter((todo) =>
     todo.content.toLowerCase().trim().includes(search.toLowerCase().trim()),

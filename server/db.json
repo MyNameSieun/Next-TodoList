@@ -1,22 +1,16 @@
 {
   "todos": [
     {
-      "id": "1",
-      "content": "Todo1",
-      "isDone": true,
-      "date": 1700000000000
-    },
-    {
       "id": "2",
       "content": "Todo2",
       "isDone": true,
       "date": 1700000000000
     },
     {
-      "id": "3",
-      "content": "Todo3",
+      "id": "6ba1",
+      "content": "ㄱ쇼",
       "isDone": false,
-      "date": 1700000000000
+      "date": "2025-12-08T07:14:59.937Z"
     }
   ]
 }
