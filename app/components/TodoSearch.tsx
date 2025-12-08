@@ -1,4 +1,6 @@
-import { useSearch } from "../context/SearchContext";
+"use client";
+
+import { useSearch } from "../context/TodoSearchContext";
 
 const TodoSearch = () => {
   const { search, setSearch } = useSearch();

@@ -3,17 +3,21 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Todo } from "../types/Todo";
 import React from "react";
-import { useTodoDispath } from "../context/TodoContext";
+import {
+  useDeleteTodo,
+  useUpdateTodo,
+} from "../hooks/mutations.ts/use-todo-mutations";
 
-const TodoItem = ({ id, content, isDone, time }: Todo) => {
-  const { onToggle, onDelete } = useTodoDispath();
+const TodoItem = ({ id, content, isDone, date }: Todo) => {
+  const { mutate: deleteTodo, isPending: isDeleting } = useDeleteTodo();
+  const { mutate: updateTodo } = useUpdateTodo();
 
   const handleToggleTodo = () => {
-    onToggle(id);
+    updateTodo({ id, isDone: !isDone });
   };
 
   const handleDeleteTodo = () => {
-    onDelete(id);
+    deleteTodo(id);
   };
 
   return (
@@ -24,10 +28,14 @@ const TodoItem = ({ id, content, isDone, time }: Todo) => {
       </Link>
 
       <time className="text-sm text-(--color-gray)">
-        {new Date(time).toLocaleDateString()}
+        {new Date(date).toLocaleDateString()}
       </time>
 
-      <Button onClick={handleDeleteTodo} variant={"destructive"}>
+      <Button
+        disabled={isDeleting}
+        onClick={handleDeleteTodo}
+        variant={"destructive"}
+      >
         삭제
       </Button>
     </li>

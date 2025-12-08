@@ -2,10 +2,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRef, useState } from "react";
-import { useTodoDispath } from "../context/TodoContext";
+import { useCreateTodo } from "../hooks/mutations.ts/use-todo-mutations";
 
 const TodoEditor = () => {
-  const { onCreate } = useTodoDispath();
+  const { mutate, isPending } = useCreateTodo();
   const [content, setContent] = useState("");
   const contentRef = useRef<HTMLInputElement>(null);
 
@@ -14,7 +14,7 @@ const TodoEditor = () => {
 
     if (content === "") return contentRef.current?.focus();
 
-    onCreate(content);
+    mutate(content);
     setContent("");
   };
 
@@ -31,7 +31,7 @@ const TodoEditor = () => {
         placeholder="할 일을 입력하세요"
         className="shadow-sm"
       />
-      <Button>추가</Button>
+      <Button disabled={isPending}>{isPending ? "추가중..." : "추가"}</Button>
     </form>
   );
 };
