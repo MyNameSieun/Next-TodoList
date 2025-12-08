@@ -1,12 +1,13 @@
 "use client";
 
-import { useTodoState } from "../context/TodoContext";
+import { useTodos } from "../hooks/queries/use-todos-queries";
 
 const TodoCount = () => {
-  const todos = useTodoState();
+  const { data } = useTodos();
+  if (!data) return <div>데이터가 없습니다.</div>;
 
-  const totalCount = todos.length;
-  const doneCount = todos.filter((todo) => todo.isDone).length;
+  const totalCount = data.length;
+  const doneCount = data.filter((todo) => todo.isDone).length;
   const notDoneCount = totalCount - doneCount;
 
   return (
