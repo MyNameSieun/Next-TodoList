@@ -42,7 +42,11 @@ export const useUpdateTodo = () => {
 
   return useMutation({
     mutationFn: updateTodo,
-    onMutate: (updateTodo) => {
+    onMutate: async (updateTodo) => {
+      await queryClient.cancelQueries({
+        queryKey: ["todo"],
+      });
+
       const prevTodos = queryClient.getQueryData<Todo[]>(["todos"]); // 원본 캐시 데이터
 
       queryClient.setQueryData<Todo[]>(["todos"], (prevTodos) => {
@@ -62,6 +66,11 @@ export const useUpdateTodo = () => {
       if (context && context.prevTodos) {
         queryClient.setQueryData<Todo[]>(["todos"], context.prevTodos);
       }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["todo"], // 무효화할 캐시의 키 값
+      });
     },
   });
 };
