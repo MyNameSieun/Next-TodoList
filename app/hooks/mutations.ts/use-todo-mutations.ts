@@ -59,7 +59,7 @@ export const useUpdateTodo = () => {
       };
     },
     onError: (error, variable, context) => {
-      if (context && context.prevTodos) {
+      if (context?.prevTodos) {
         queryClient.setQueryData<Todo[]>(["todos"], context.prevTodos);
       }
     },
