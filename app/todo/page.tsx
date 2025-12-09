@@ -11,12 +11,13 @@ import TodoHeader from "../components/TodoHeader";
 import TodoList from "../components/TodoList";
 import TodoSearch from "../components/TodoSearch";
 import { fetchTodos } from "../services/todo";
+import { QUERY_KEYS } from "@/lib/keys.constant";
 
 const TodoPage = async () => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ["todos"],
+    queryKey: QUERY_KEYS.todo.list,
     queryFn: fetchTodos,
   });
 

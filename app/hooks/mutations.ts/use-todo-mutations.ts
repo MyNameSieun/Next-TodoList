@@ -2,6 +2,7 @@
 
 import { createTodo, deleteTodo, updateTodo } from "@/app/services/todo";
 import { Todo } from "@/app/types/Todo";
+import { QUERY_KEYS } from "@/lib/keys.constant";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 // 추가
@@ -11,7 +12,7 @@ export const useCreateTodo = () => {
   return useMutation({
     mutationFn: createTodo,
     onSuccess: (newTodo) => {
-      queryClient.setQueryData<Todo[]>(["todos"], (prevTodos) => {
+      queryClient.setQueryData<Todo[]>(QUERY_KEYS.todo.list, (prevTodos) => {
         if (!prevTodos) return [newTodo]; // newTodo로 초기 캐시 생성
         return [...prevTodos, newTodo];
       });
@@ -27,7 +28,7 @@ export const useDeleteTodo = () => {
   return useMutation({
     mutationFn: deleteTodo,
     onSuccess: (deletedId) => {
-      queryClient.setQueryData<Todo[]>(["todos"], (prevTodos) => {
+      queryClient.setQueryData<Todo[]>(QUERY_KEYS.todo.list, (prevTodos) => {
         if (!deletedId) return prevTodos;
         return prevTodos?.filter((todo) => todo.id !== deletedId);
       });
@@ -43,9 +44,9 @@ export const useUpdateTodo = () => {
   return useMutation({
     mutationFn: updateTodo,
     onMutate: (updateTodo) => {
-      const prevTodos = queryClient.getQueryData<Todo[]>(["todos"]); // 원본 캐시 데이터
+      const prevTodos = queryClient.getQueryData<Todo[]>(QUERY_KEYS.todo.list); // 원본 캐시 데이터
 
-      queryClient.setQueryData<Todo[]>(["todos"], (prevTodos) => {
+      queryClient.setQueryData<Todo[]>(QUERY_KEYS.todo.list, (prevTodos) => {
         if (!prevTodos) return prevTodos;
 
         return prevTodos.map((prevTodo) =>
@@ -60,7 +61,10 @@ export const useUpdateTodo = () => {
     },
     onError: (error, variable, context) => {
       if (context?.prevTodos) {
-        queryClient.setQueryData<Todo[]>(["todos"], context.prevTodos);
+        queryClient.setQueryData<Todo[]>(
+          QUERY_KEYS.todo.list,
+          context.prevTodos,
+        );
       }
     },
   });
