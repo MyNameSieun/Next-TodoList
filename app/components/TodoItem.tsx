@@ -1,16 +1,20 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Todo } from "../types/Todo";
 import React from "react";
 import {
   useDeleteTodo,
   useUpdateTodo,
 } from "../hooks/mutations.ts/use-todo-mutations";
+import { useTodoById } from "../hooks/queries/use-todos-queries";
 
-const TodoItem = ({ id, content, isDone, date }: Todo) => {
+const TodoItem = ({ id }: { id: string }) => {
+  const { data: todo } = useTodoById(id, "LIST");
   const { mutate: deleteTodo, isPending: isDeleting } = useDeleteTodo();
   const { mutate: updateTodo } = useUpdateTodo();
+
+  if (!todo) throw new Error("Todo Data Undefined!");
+  const { content, isDone, date } = todo;
 
   const handleToggleTodo = () => {
     updateTodo({ id, isDone: !isDone });

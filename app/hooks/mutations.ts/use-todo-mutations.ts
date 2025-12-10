@@ -2,6 +2,7 @@
 
 import { createTodo, deleteTodo, updateTodo } from "@/app/services/todo";
 import { Todo } from "@/app/types/Todo";
+import { QUERY_KEYS } from "@/lib/keys.constant";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 // 추가
@@ -11,9 +12,10 @@ export const useCreateTodo = () => {
   return useMutation({
     mutationFn: createTodo,
     onSuccess: (newTodo) => {
-      queryClient.setQueryData<Todo[]>(["todos"], (prevTodos) => {
-        if (!prevTodos) return [newTodo]; // newTodo로 초기 캐시 생성
-        return [...prevTodos, newTodo];
+      queryClient.setQueryData(QUERY_KEYS.todo.detail(newTodo.id), newTodo);
+
+      queryClient.setQueryData<string[]>(QUERY_KEYS.todo.list, (prevIds) => {
+        return prevIds ? [...prevIds, newTodo.id] : [newTodo.id];
       });
     },
     onError: (error) => window.alert(error.message),
@@ -27,9 +29,13 @@ export const useDeleteTodo = () => {
   return useMutation({
     mutationFn: deleteTodo,
     onSuccess: (deletedId) => {
-      queryClient.setQueryData<Todo[]>(["todos"], (prevTodos) => {
-        if (!deletedId) return prevTodos;
-        return prevTodos?.filter((todo) => todo.id !== deletedId);
+      queryClient.removeQueries({
+        queryKey: QUERY_KEYS.todo.detail(deletedId),
+      });
+
+      queryClient.setQueryData<string[]>(QUERY_KEYS.todo.list, (prevIds) => {
+        if (!prevIds) return prevIds;
+        return prevIds?.filter((id) => id !== deletedId);
       });
     },
     onError: (error) => window.alert(error.message),
@@ -42,25 +48,30 @@ export const useUpdateTodo = () => {
 
   return useMutation({
     mutationFn: updateTodo,
-    onMutate: (updateTodo) => {
-      const prevTodos = queryClient.getQueryData<Todo[]>(["todos"]); // 원본 캐시 데이터
-
-      queryClient.setQueryData<Todo[]>(["todos"], (prevTodos) => {
-        if (!prevTodos) return prevTodos;
-
-        return prevTodos.map((prevTodo) =>
-          prevTodo.id === updateTodo.id
-            ? { ...prevTodo, ...updateTodo }
-            : prevTodo,
-        );
+    onMutate: async (updateTodo) => {
+      await queryClient.cancelQueries({
+        queryKey: QUERY_KEYS.todo.detail(updateTodo.id),
       });
+
+      const prevTodo = queryClient.getQueryData<Todo>(
+        QUERY_KEYS.todo.detail(updateTodo.id),
+      );
+
+      queryClient.setQueryData<Todo>(
+        QUERY_KEYS.todo.detail(updateTodo.id),
+        (prevTodo) => (prevTodo ? { ...prevTodo, ...updateTodo } : prevTodo),
+      );
+
       return {
-        prevTodos,
+        prevTodo,
       };
     },
     onError: (error, variable, context) => {
-      if (context?.prevTodos) {
-        queryClient.setQueryData<Todo[]>(["todos"], context.prevTodos);
+      if (context?.prevTodo) {
+        queryClient.setQueryData<Todo>(
+          QUERY_KEYS.todo.detail(context.prevTodo.id),
+          context.prevTodo,
+        );
       }
     },
   });
